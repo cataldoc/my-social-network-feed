@@ -15,10 +15,19 @@ serve(async (req) => {
   }
 
   const token = authHeader.substring("Bearer ".length);
+  const searchParams = url.searchParams;
+
   try {
     const userDid = await verifyJwtAndExtractDid(token);
-    const posts = await getFeedForUser(userDid);
+    const options = {
+      mediaOnly: searchParams.get("mediaOnly") === "true",
+      includeReplies: searchParams.get("includeReplies") !== "false",
+      includeReposts: searchParams.get("includeReposts") !== "false",
+      mutualsOnly: searchParams.get("mutualsOnly") === "true",
+      hashtags: searchParams.get("hashtags")?.split("+") || [],
+    };
 
+    const posts = await getFeedForUser(userDid, options);
     return new Response(JSON.stringify({ feed: "my-social-network", posts }), {
       headers: { "content-type": "application/json" },
     });

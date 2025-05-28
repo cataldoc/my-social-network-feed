@@ -2,12 +2,53 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>My Social Network Feed</title>
 </head>
 <body>
   <h1>My Social Network</h1>
-  <p>Questo feed mostra i post dei tuoi following in ordine cronologico, comprese risposte, repost e citazioni. È personalizzato per ogni utente.</p>
-  <p><a href="at://feed.itsmy.social/feed/my-social-network">Attiva il feed su Bluesky</a></p>
+  <p>Configura il tuo feed personalizzato:</p>
+  <form id="feedForm">
+    <label>
+      <input type="checkbox" name="mediaOnly" />
+      Solo post con immagini o video
+    </label><br />
+    <label>
+      <input type="checkbox" name="includeReplies" checked />
+      Includi risposte
+    </label><br />
+    <label>
+      <input type="checkbox" name="includeReposts" checked />
+      Includi repost
+    </label><br />
+    <label>
+      <input type="checkbox" name="mutualsOnly" />
+      Solo da mutuals
+    </label><br />
+    <label>
+      Filtra per hashtag: <input type="text" name="hashtags" placeholder="#arte #news" />
+    </label><br /><br />
+    <button type="submit">Genera link feed</button>
+  </form>
+  <p><a id="resultLink" href="#" target="_blank" style="display:none;">Apri il feed su Bluesky</a></p>
+  <script>
+    document.getElementById("feedForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const params = new URLSearchParams();
+      const form = e.target;
+      if (form.mediaOnly.checked) params.append("mediaOnly", "true");
+      if (form.includeReplies.checked) params.append("includeReplies", "true");
+      if (form.includeReposts.checked) params.append("includeReposts", "true");
+      if (form.mutualsOnly.checked) params.append("mutualsOnly", "true");
+      const hashtags = form.hashtags.value.trim().replace(/#/g, "").replace(/\s+/g, "+");
+      if (hashtags) params.append("hashtags", hashtags);
+
+      const link = `at://feed.itsmy.social/feed/my-social-network?${params.toString()}`;
+      const a = document.getElementById("resultLink");
+      a.href = link;
+      a.textContent = "Attiva il feed su Bluesky";
+      a.style.display = "inline";
+    });
+  </script>
 </body>
 </html>
