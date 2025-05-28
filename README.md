@@ -1,22 +1,20 @@
 
-# My Social Network Feed
+# My Social Network Feed (multiutente)
 
-Un feed personalizzato Bluesky con contenuti cronologici dai tuoi following.
+Feed personalizzato per Bluesky, dinamico per ogni utente in base al proprio account.
+
+## Caratteristiche
+- Contenuti cronologici dai following
+- Include repost, citazioni e risposte
+- Rispetta blocchi e silenzi dell'utente (gestibili lato Bluesky)
+- Accesso via token JWT firmato (standard Bluesky)
 
 ## Requisiti
+- Deno (`sudo pacman -Syu deno`)
 
-- [Deno](https://deno.land/) (`sudo pacman -Syu deno`)
-- File `.env` con credenziali Bluesky:
-  ```env
-  BSKY_IDENTIFIER=tuo@handle.bsky.social
-  BSKY_PASSWORD=la_tua_password
-  ```
-
-## Setup
-
-1. Clona questo repository su `/opt/my-social-network-feed`
-2. Crea il file `.env` copiando `.env.example`
-3. Avvia il servizio:
+## Deploy
+1. Copia il progetto in `/opt/my-social-network-feed`
+2. Avvia con systemd:
 
 ```bash
 sudo cp systemd/bluesky-feed.service /etc/systemd/system/
@@ -24,9 +22,9 @@ sudo systemctl daemon-reexec
 sudo systemctl enable --now bluesky-feed.service
 ```
 
-4. Configura NGINX per servire `feed.itsmy.social` verso `localhost:8787`
+3. Configura NGINX per esporre `feed.itsmy.social` verso `localhost:8787`
 
-## Feed su Bluesky
+## Registrazione del feed su Bluesky
 
-Il feed sarà disponibile all’URL: `https://feed.itsmy.social/feed`
-Registralo tramite l’interfaccia [https://bsky.app/settings/feeds](https://bsky.app/settings/feeds)
+Segui: https://docs.bsky.app/docs/tutorials/custom-feeds
+Usa endpoint: `https://feed.itsmy.social/feed`

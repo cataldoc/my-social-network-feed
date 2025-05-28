@@ -1,45 +1,38 @@
 
 import { BskyAgent } from 'npm:@atproto/api';
-import 'https://deno.land/std@0.177.0/dotenv/load.ts';
 
-const identifier = Deno.env.get("BSKY_IDENTIFIER")!;
-const password = Deno.env.get("BSKY_PASSWORD")!;
-
-export async function getFeedPosts() {
+export async function getFeedForUser(userDid: string): Promise<any[]> {
   const agent = new BskyAgent({ service: "https://bsky.social" });
-  await agent.login({ identifier, password });
 
-  // Get user's DID
-  const profile = await agent.getProfile({ actor: identifier });
-  const userDid = profile.data.did;
-
-  // Get following list
-  const followingRes = await agent.app.bsky.graph.getFollows({
+  // Recupera lista dei following
+  const followsRes = await agent.app.bsky.graph.getFollows({
     actor: userDid,
     limit: 1000,
   });
-  const followingDids = new Set(followingRes.data.follows.map(f => f.did));
 
-  // Get timeline
-  const timelineRes = await agent.getTimeline({ limit: 100 });
-  const feedItems = timelineRes.data.feed;
+  const followingDids = new Set(followsRes.data.follows.map(f => f.did));
 
-  // Filter posts from followed users or their reposts/replies
-  const filteredPosts = feedItems
-    .filter(item => {
-      const originator = item.post.author.did;
-      const isFromFollowing = followingDids.has(originator);
+  // Inizializza array per i post
+  const posts: any[] = [];
 
-      const isReply = item.post.record?.reply !== undefined;
-      const isRepost = item.reason?.$type === "app.bsky.feed.defs#reasonRepost";
-      const repostedByFollowing = item.reason && followingDids.has(item.reason.by.did);
+  for (const did of followingDids) {
+    try {
+      const feedRes = await agent.app.bsky.feed.getAuthorFeed({
+        actor: did,
+        limit: 10,
+      });
+      for (const item of feedRes.data.feed) {
+        if (item.post) {
+          posts.push(item.post);
+        }
+      }
+    } catch (_) {
+      continue; // ignora errori singoli
+    }
+  }
 
-      return (
-        isFromFollowing || repostedByFollowing || isReply
-      );
-    })
-    .map(item => item.post)
+  // Ordina cronologicamente
+  return posts
+    .filter(p => p.indexedAt)
     .sort((a, b) => new Date(b.indexedAt).getTime() - new Date(a.indexedAt).getTime());
-
-  return filteredPosts;
 }
