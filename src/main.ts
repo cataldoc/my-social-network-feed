@@ -5,10 +5,14 @@ import { getFeedPosts } from "./feed-logic.ts";
 serve(async (req) => {
   const url = new URL(req.url);
   if (url.pathname === "/feed") {
-    const posts = await getFeedPosts();
-    return new Response(JSON.stringify({ feed: "my-social-network", posts }), {
-      headers: { "content-type": "application/json" },
-    });
+    try {
+      const posts = await getFeedPosts();
+      return new Response(JSON.stringify({ feed: "my-social-network", posts }), {
+        headers: { "content-type": "application/json" },
+      });
+    } catch (err) {
+      return new Response("Errore interno: " + err.message, { status: 500 });
+    }
   }
 
   return new Response("My Social Network Feed Generator", {
