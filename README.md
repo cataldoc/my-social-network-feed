@@ -1,31 +1,28 @@
 
 # My Social Network Feed
 
-Questo è un feed personalizzato per Bluesky che mostra i contenuti (testo, immagini, video, repost, risposte) degli account che segui in ordine cronologico.
+Un feed personalizzato per Bluesky che mostra post da account seguiti, ordinati cronologicamente, inclusi repost, risposte e citazioni.
 
-## Avvio del feed
+## Requisiti
 
-1. Installa Deno:
-   ```bash
-   sudo pacman -Syu deno
-   ```
+- Deno (`sudo pacman -Syu deno`)
+- Account Bluesky con username/password
 
-2. Clona o copia questo repository sul server, ad esempio in `/opt/my-social-network-feed`.
+## Setup
 
-3. Copia il file systemd:
-   ```bash
-   sudo cp systemd/bluesky-feed.service /etc/systemd/system/
-   sudo systemctl daemon-reexec
-   sudo systemctl enable --now bluesky-feed.service
-   ```
+1. Copia i file su `/opt/my-social-network-feed`
+2. Modifica `src/feed-logic.ts` inserendo il tuo username e password Bluesky
+3. Avvia con systemd:
 
-4. Configura NGINX come reverse proxy su `feed.itsmy.social`, proxy_pass verso `localhost:8787`.
+```bash
+sudo cp systemd/bluesky-feed.service /etc/systemd/system/
+sudo systemctl daemon-reexec
+sudo systemctl enable --now bluesky-feed.service
+```
 
-5. Visita `https://feed.itsmy.social` per vedere la pagina del feed.
+4. Configura NGINX su `feed.itsmy.social` come reverse proxy su `localhost:8787`
+5. Visita `https://feed.itsmy.social`
 
 ## Registrazione su Bluesky
 
-Segui la documentazione ufficiale su:
-https://docs.bsky.app/docs/tutorials/custom-feeds
-
-Assicurati che l'endpoint `/feed` sia raggiungibile e conforme al protocollo ATProto.
+Registrati su https://bsky.app/settings/feeds
