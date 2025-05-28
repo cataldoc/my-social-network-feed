@@ -1,0 +1,12 @@
+
+[Unit]
+Description=Bluesky Feed Generator
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/deno run --allow-net /opt/my-social-network-feed/src/main.ts
+Restart=always
+User=bluesky
+
+[Install]
+WantedBy=multi-user.target
