@@ -35,6 +35,14 @@ sudo systemctl enable --now bluesky-feed.service
 5. 5. **Assicurati** che l’account tecnico abbia accesso in lettura a blocchi e silenzi (necessario per il filtro)  
 6. Visita `https://feed.itsmy.social` per configurare e attivare il feed
 
+## 📡 Pubblicazione dell’algoritmo (feed generator)
+
+Per rendere visibile il tuo feed come algoritmo personalizzato su Bluesky:
+
+1. Installa eventuali dipendenze:
+   ```bash
+   deno cache scripts/publishFeedGen.ts
+
 ## Registrazione
 
 Registrati su https://bsky.app/settings/feeds con:
