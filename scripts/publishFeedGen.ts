@@ -19,15 +19,14 @@ async function publish() {
 
   // Definisci il record da pubblicare
   const record = {
-    $type: "app.bsky.feed.generator#customFeed"
-    did: agent.session!.did,
+    $type: "app.bsky.feed.generator",      // record type corretto
+    did: agent.session!.did,               // obbligatorio
     displayName: "My Social Network",
     description: "Feed cronologico personalizzato dai tuoi following.",
     algorithm: {
       $type: "app.bsky.feed.generator#algorithm",
       uri: "at://feed.itsmy.social/xrpc/app.bsky.feed.getFeedSkeleton?feed=at://feed.itsmy.social/feed/my-social-network",
     },
-    // opzionale: icona, contatti, tags...
   };
 
   // Crea o aggiorna il record
