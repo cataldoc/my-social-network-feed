@@ -17,6 +17,7 @@ Feed Bluesky dinamico, personalizzato per ogni utente. Supporta filtri seleziona
 
 - Post da following, ordinati cronologicamente
 - Include/includi risposte, repost, solo mutuals
+- Rispetta **blocchi** e **silenzi** dell’utente (filtra via `app.bsky.graph.getBlocks` e `getMutes`)  
 - Filtro per post con media o hashtag
 
 ## Deploy
@@ -31,7 +32,8 @@ sudo systemctl enable --now bluesky-feed.service
 ```
 
 4. Configura NGINX per `feed.itsmy.social` → `localhost:8787`
-5. Visita `https://feed.itsmy.social` per configurare e attivare il feed
+5. 5. **Assicurati** che l’account tecnico abbia accesso in lettura a blocchi e silenzi (necessario per il filtro)  
+6. Visita `https://feed.itsmy.social` per configurare e attivare il feed
 
 ## Registrazione
 
