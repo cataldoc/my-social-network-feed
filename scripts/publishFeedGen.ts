@@ -19,7 +19,7 @@ async function publish() {
 
   // Definisci il record da pubblicare
   const record = {
-    $type: "app.bsky.feed.generator",
+    $type: "app.bsky.feed.generator#customFeed"
     did: agent.session!.did,
     displayName: "My Social Network",
     description: "Feed cronologico personalizzato dai tuoi following.",
