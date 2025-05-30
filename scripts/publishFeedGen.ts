@@ -17,11 +17,11 @@ async function publish() {
     password: Deno.env.get("BSKY_PASSWORD")!,
   });
 
-  // Definisci il record da pubblicare, ora includendo createdAt
+  // Definisci il record da pubblicare
   const record = {
     $type: "app.bsky.feed.generator",
     did: agent.session!.did,
-    createdAt: new Date().toISOString(),    // timestamp ISO8601 richiesto
+    createdAt: new Date().toISOString(),
     displayName: "My Social Network",
     description: "Feed cronologico personalizzato dai tuoi following.",
     algorithm: {
@@ -37,7 +37,12 @@ async function publish() {
     record,
   });
 
-  console.log("Feed generator pubblicato:", response.uri);
+  // Log full response for debugging
+  console.log("Response data:", JSON.stringify(response, null, 2));
+
+  // Extract URI
+  const uri = (response as any).uri ?? (response as any).data?.uri;
+  console.log("Feed generator pubblicato:", uri);
 }
 
 publish().catch(err => {
